@@ -1,0 +1,26 @@
+local UserInputService = game:GetService("UserInputService")
+
+local platform = UserInputService:GetPlatform()
+
+local isMobile = (platform == Enum.Platform.Android)
+              or (platform == Enum.Platform.IOS)
+              or (UserInputService.TouchEnabled and not (platform == Enum.Platform.Windows or platform == Enum.Platform.OSX))
+
+local pcUrl    = "https://raw.githubusercontent.com/erick2135/lion/refs/heads/main/Lion"
+local mobileUrl= "https://raw.githubusercontent.com/erick2135/Lion-Hub-Mobile/refs/heads/main/README.md"
+
+local urlToLoad = isMobile and mobileUrl or pcUrl
+
+local success, err = pcall(function()
+    local scriptText = game:HttpGet(urlToLoad)
+    local f = loadstring(scriptText)
+    if f then
+        f()
+    else
+        error("loadstring retornou nil (conteúdo pode não ser código Lua).")
+    end
+end)
+
+if not success then
+    warn("Falha ao carregar script de: "..urlToLoad .. "  |  Erro: ".. tostring(err))
+end
